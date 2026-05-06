@@ -654,12 +654,19 @@ button:disabled {
 @media (max-width: 980px) {
   .topbar {
     position: static;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr auto;
   }
 
-  nav,
-  .user-box {
+  .brand {
+    grid-column: 1 / -1;
+  }
+
+  nav {
     justify-self: start;
+  }
+
+  .user-box {
+    justify-self: end;
   }
 
   .main {
@@ -706,5 +713,9 @@ button:disabled {
 
   .history-row {
     display: grid;
+  }
+
+  .history-icon {
+    display: none;
   }
 }
