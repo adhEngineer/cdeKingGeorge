@@ -166,9 +166,10 @@ export function AdminDashboard({ profile }: AdminDashboardProps) {
                 <td>
                   {order.order_items?.map((item) => (
                     <span className="line-item" key={`${order.id}-${item.product_type}`}>
-                      {item.product_type === 'short_sleeve' ? 'Scurta' : 'Lunga'} {item.shirt_size}, set {item.quantity_set}, buc {item.quantity_piece}
+                      {item.product_type === 'short_sleeve' ? 'Scurta' : 'Lunga'} {item.shirt_size}, buc {item.quantity_piece}
                     </span>
                   ))}
+                  <span className="line-item">Set: {Math.max(0, ...(order.order_items ?? []).map((item) => Number(item.quantity_set ?? 0)))}</span>
                 </td>
                 <td>
                   <button className="icon-button" title="Descarca PDF" onClick={() => void downloadSinglePdf(order)}>

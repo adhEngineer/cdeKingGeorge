@@ -25,6 +25,7 @@ export function OrderForm({ profile }: OrderFormProps) {
     parent_name: profile?.parent_name ?? '',
     order_date: today,
     signature_name: profile?.parent_name ?? '',
+    set_quantity: 0,
     items: initialItems,
   });
   const [status, setStatus] = useState('');
@@ -54,6 +55,7 @@ export function OrderForm({ profile }: OrderFormProps) {
           parent_name: latest.parent_name,
           order_date: today,
           signature_name: latest.signature_name || latest.parent_name,
+          set_quantity: getOrderSetQuantity(latest.order_items ?? []),
           items: mergeItems(latest.order_items ?? initialItems),
         });
       } else {
@@ -81,9 +83,9 @@ export function OrderForm({ profile }: OrderFormProps) {
       const product = products.find((entry) => entry.id === item.product_type);
       return total + (product?.unitPrice ?? 0) * item.quantity_piece;
     }, 0);
-    const sets = form.items.reduce((total, item) => total + item.quantity_set, 0) * setPrice;
+    const sets = form.set_quantity * setPrice;
     return pieces + sets;
-  }, [form.items]);
+  }, [form.items, form.set_quantity]);
 
   const updateItem = (index: number, patch: Partial<OrderItemInput>) => {
     setForm((current) => ({
@@ -129,9 +131,10 @@ export function OrderForm({ profile }: OrderFormProps) {
       if (orderError) throw orderError;
 
       const { error: itemError } = await supabase.from('order_items').insert(
-        form.items.map((item) => ({
+        form.items.map((item, index) => ({
           order_id: order.id,
           ...item,
+          quantity_set: index === 0 ? form.set_quantity : 0,
         })),
       );
       if (itemError) throw itemError;
@@ -171,20 +174,13 @@ export function OrderForm({ profile }: OrderFormProps) {
   const downloadOrder = async (order: Order) => {
     setStatus('');
     try {
-      const file = order.order_files?.[0];
-      if (supabase && file) {
-        const { data, error } = await supabase.storage.from('order-pdfs').download(file.storage_path);
-        if (error) throw error;
-        downloadBlob(data, file.file_name);
-        return;
-      }
-
       const pdfData: OrderFormData = {
         student_name: order.student_name,
         class_group: order.class_group,
         parent_name: order.parent_name,
         order_date: order.order_date,
         signature_name: order.signature_name,
+        set_quantity: getOrderSetQuantity(order.order_items ?? []),
         items: mergeItems(order.order_items ?? initialItems),
       };
       const blob = await generateOrderPdf(pdfData);
@@ -246,14 +242,16 @@ export function OrderForm({ profile }: OrderFormProps) {
                       ))}
                     </select>
                   </td>
-                  <td>
+                  {index === 0 && (
+                  <td rowSpan={form.items.length}>
                     <input
                       type="number"
                       min="0"
-                      value={item.quantity_set}
-                      onChange={(event) => updateItem(index, { quantity_set: Number(event.target.value) })}
+                      value={form.set_quantity}
+                      onChange={(event) => setForm({ ...form, set_quantity: Number(event.target.value) })}
                     />
                   </td>
+                  )}
                   <td>
                     <input
                       type="number"
@@ -328,7 +326,7 @@ export function OrderForm({ profile }: OrderFormProps) {
                 <div>
                   <strong>{order.student_name}</strong>
                   <span>
-                    {order.class_group} · {new Date(order.created_at).toLocaleDateString('ro-RO')} · semnat de {order.signature_name}
+                    {order.class_group} | set {getOrderSetQuantity(order.order_items ?? [])} | {new Date(order.created_at).toLocaleDateString('ro-RO')} | semnat de {order.signature_name}
                   </span>
                 </div>
                 <button className="secondary-button" type="button" onClick={() => void downloadOrder(order)}>
@@ -351,9 +349,13 @@ function mergeItems(items: OrderItemInput[]) {
       ? {
           product_type: found.product_type,
           shirt_size: found.shirt_size,
-          quantity_set: Number(found.quantity_set ?? 0),
+          quantity_set: 0,
           quantity_piece: Number(found.quantity_piece ?? 0),
         }
       : initial;
   });
+}
+
+function getOrderSetQuantity(items: OrderItemInput[]) {
+  return Math.max(0, ...items.map((item) => Number(item.quantity_set ?? 0)));
 }

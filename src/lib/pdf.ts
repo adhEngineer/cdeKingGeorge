@@ -36,9 +36,9 @@ export async function generateOrderPdf(data: OrderFormData) {
   data.items.forEach((item, index) => {
     const y = index === 0 ? 470 : 441;
     drawText(page1, item.shirt_size, 358, y, 10);
-    drawText(page1, String(item.quantity_set), 461, y, 10);
     drawText(page1, String(item.quantity_piece), 534, y, 10);
   });
+  drawText(page1, String(data.set_quantity), 461, 456, 10);
 
   page2.setFont(bold);
   drawText(page2, data.signature_name, 205, 55, 12);

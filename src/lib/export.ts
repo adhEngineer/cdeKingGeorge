@@ -6,6 +6,7 @@ import type { Order } from './types';
 export async function exportOrdersXlsx(orders: Order[]) {
   const rows = orders.flatMap((order) => {
     const items = order.order_items?.length ? order.order_items : [undefined];
+    const setQuantity = Math.max(0, ...(order.order_items ?? []).map((item) => Number(item.quantity_set ?? 0)));
     return items.map((item) => ({
       'Data creare': new Date(order.created_at).toLocaleString('ro-RO'),
       'Data comenzii': order.order_date,
@@ -15,7 +16,7 @@ export async function exportOrdersXlsx(orders: Order[]) {
       Status: order.status,
       Produs: item?.product_type === 'short_sleeve' ? 'Tricou maneca scurta' : item?.product_type === 'long_sleeve' ? 'Tricou maneca lunga' : '',
       'Nr. tricou': item?.shirt_size ?? '',
-      'Cantitate set': item?.quantity_set ?? '',
+      'Cantitate set': item?.product_type === 'short_sleeve' ? setQuantity : '',
       'Cantitate bucata': item?.quantity_piece ?? '',
       'PDF': order.order_files?.[0]?.file_name ?? '',
     }));
