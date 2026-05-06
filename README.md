@@ -38,11 +38,11 @@ where email = 'adresa-ta@email.ro';
 
 ## GitHub Pages
 
-Workflow-ul `.github/workflows/pages.yml` publica automat `main` pe GitHub Pages.
-
 Adauga in repository secrets:
 
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_ANON_KEY`
+
+Pentru deploy automat, adauga un GitHub Actions workflow care ruleaza `npm ci` si `npm run build`, apoi publica folderul `dist` pe GitHub Pages. Daca folosesti un Personal Access Token pentru push, acesta trebuie sa aiba scope `workflow` ca sa poata urca fisiere in `.github/workflows`.
 
 Aplicatia admin este disponibila la `#/admin`.
