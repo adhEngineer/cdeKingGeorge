@@ -1,4 +1,4 @@
 window.KING_GEORGE_CONFIG = {
-  SUPABASE_URL: "",
-  SUPABASE_ANON_KEY: "",
+  SUPABASE_URL: "https://unojcluqkycyfylbfrqo.supabase.co",
+  SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVub2pjbHVxa3ljeWZ5bGJmcnFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNjgwMzMsImV4cCI6MjA5MzY0NDAzM30.qNGz22qV9-gV60Mezq9tmOgBB0FZrRLmzYUOiINE4bs",
 };
