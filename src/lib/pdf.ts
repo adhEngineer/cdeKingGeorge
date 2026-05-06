@@ -9,11 +9,13 @@ const drawText = (
   x: number,
   y: number,
   size = 10,
+  font?: import('pdf-lib').PDFFont,
 ) => {
   page.drawText(text || '-', {
     x,
     y,
     size,
+    font,
     color: rgb(0.06, 0.12, 0.16),
   });
 };
@@ -28,20 +30,20 @@ export async function generateOrderPdf(data: OrderFormData) {
   page1.setFont(font);
   page2.setFont(font);
 
-  drawText(page1, data.student_name, 208, 631, 11);
-  drawText(page1, data.class_group, 273, 609, 11);
-  drawText(page1, data.parent_name, 224, 587, 11);
-  drawText(page1, data.order_date, 138, 566, 11);
+  drawText(page1, data.student_name, 208, 630, 14, bold);
+  drawText(page1, data.class_group, 273, 608, 14, bold);
+  drawText(page1, data.parent_name, 224, 586, 14, bold);
+  drawText(page1, data.order_date, 138, 565, 14, bold);
 
   data.items.forEach((item, index) => {
     const y = index === 0 ? 470 : 441;
-    drawText(page1, item.shirt_size, 358, y, 10);
-    drawText(page1, String(item.quantity_piece), 534, y, 10);
+    drawText(page1, item.shirt_size, 356, y - 1, 13, bold);
+    drawText(page1, String(item.quantity_piece), 532, y - 1, 13, bold);
   });
-  drawText(page1, String(data.set_quantity), 461, 456, 10);
+  drawText(page1, String(data.set_quantity), 459, 455, 13, bold);
 
   page2.setFont(bold);
-  drawText(page2, data.signature_name, 232, 61, 12);
+  drawText(page2, data.signature_name, 224, 60, 15, bold);
 
   const bytes = await pdfDoc.save();
   const arrayBuffer = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
