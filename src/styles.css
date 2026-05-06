@@ -169,6 +169,12 @@ nav a.active {
   align-content: start;
 }
 
+.order-stack {
+  display: grid;
+  gap: 22px;
+  min-width: 0;
+}
+
 .panel {
   min-width: 0;
   background: var(--panel);
@@ -179,6 +185,7 @@ nav a.active {
 
 .order-form,
 .admin-panel,
+.history-panel,
 .notes-panel,
 .size-panel {
   padding: 24px;
@@ -361,6 +368,61 @@ tr:last-child td {
   margin-bottom: 18px;
 }
 
+.history-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+
+.history-header .section-title {
+  margin-bottom: 0;
+}
+
+.order-history-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.history-row {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfdfc;
+}
+
+.history-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  color: var(--green-dark);
+  border-radius: 8px;
+  background: var(--green-soft);
+}
+
+.history-row strong,
+.history-row span {
+  display: block;
+}
+
+.history-row strong {
+  font-size: 14px;
+}
+
+.history-row span {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
 .primary-button,
 .secondary-button,
 .text-button,
@@ -539,6 +601,7 @@ button:disabled {
 
   .order-form,
   .admin-panel,
+  .history-panel,
   .notes-panel,
   .size-panel,
   .auth-modal {
@@ -556,5 +619,14 @@ button:disabled {
 
   .admin-header {
     align-items: flex-start;
+  }
+
+  .history-header,
+  .history-row {
+    grid-template-columns: 1fr;
+  }
+
+  .history-row {
+    display: grid;
   }
 }

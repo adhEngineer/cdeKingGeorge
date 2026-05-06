@@ -1,9 +1,9 @@
-import { FormEvent, useMemo, useState } from 'react';
-import { Download, Save } from 'lucide-react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { Download, FileText, RefreshCw, Save } from 'lucide-react';
 import { products, setPrice, shirtSizes } from '../lib/constants';
 import { downloadBlob, generateOrderPdf } from '../lib/pdf';
 import { supabase } from '../lib/supabase';
-import type { OrderFormData, OrderItemInput, Profile } from '../lib/types';
+import type { Order, OrderFormData, OrderItemInput, Profile } from '../lib/types';
 
 type OrderFormProps = {
   profile: Profile | null;
@@ -29,7 +29,52 @@ export function OrderForm({ profile }: OrderFormProps) {
   });
   const [status, setStatus] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const [isLoadingOrders, setIsLoadingOrders] = useState(false);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [lastPdf, setLastPdf] = useState<{ blob: Blob; fileName: string } | null>(null);
+
+  const loadOrders = async () => {
+    if (!supabase || !profile) return;
+    setIsLoadingOrders(true);
+    try {
+      const { data, error } = await supabase
+        .from('orders')
+        .select('*, order_items(*), order_files(storage_path, file_name)')
+        .eq('user_id', profile.id)
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      const nextOrders = (data ?? []) as Order[];
+      setOrders(nextOrders);
+
+      const latest = nextOrders[0];
+      if (latest) {
+        setForm({
+          student_name: latest.student_name,
+          class_group: latest.class_group,
+          parent_name: latest.parent_name,
+          order_date: today,
+          signature_name: latest.signature_name || latest.parent_name,
+          items: mergeItems(latest.order_items ?? initialItems),
+        });
+      } else {
+        setForm((current) => ({
+          ...current,
+          student_name: profile.student_name || current.student_name,
+          class_group: profile.class_group || current.class_group,
+          parent_name: profile.parent_name || current.parent_name,
+          signature_name: profile.parent_name || current.signature_name,
+        }));
+      }
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'Nu am putut incarca comenzile tale.');
+    } finally {
+      setIsLoadingOrders(false);
+    }
+  };
+
+  useEffect(() => {
+    void loadOrders();
+  }, [profile?.id]);
 
   const estimatedTotal = useMemo(() => {
     const pieces = form.items.reduce((total, item) => {
@@ -91,6 +136,15 @@ export function OrderForm({ profile }: OrderFormProps) {
       );
       if (itemError) throw itemError;
 
+      await supabase
+        .from('profiles')
+        .update({
+          parent_name: form.parent_name,
+          student_name: form.student_name,
+          class_group: form.class_group,
+        })
+        .eq('id', profile.id);
+
       const storagePath = `${profile.id}/${order.id}/${pdf.fileName}`;
       const { error: uploadError } = await supabase.storage.from('order-pdfs').upload(storagePath, pdf.blob, {
         contentType: 'application/pdf',
@@ -106,6 +160,7 @@ export function OrderForm({ profile }: OrderFormProps) {
 
       downloadBlob(pdf.blob, pdf.fileName);
       setStatus('Comanda a fost salvata si PDF-ul a fost descarcat.');
+      await loadOrders();
     } catch (error) {
       setStatus(error instanceof Error ? error.message : 'Comanda nu a putut fi salvata.');
     } finally {
@@ -113,8 +168,35 @@ export function OrderForm({ profile }: OrderFormProps) {
     }
   };
 
+  const downloadOrder = async (order: Order) => {
+    setStatus('');
+    try {
+      const file = order.order_files?.[0];
+      if (supabase && file) {
+        const { data, error } = await supabase.storage.from('order-pdfs').download(file.storage_path);
+        if (error) throw error;
+        downloadBlob(data, file.file_name);
+        return;
+      }
+
+      const pdfData: OrderFormData = {
+        student_name: order.student_name,
+        class_group: order.class_group,
+        parent_name: order.parent_name,
+        order_date: order.order_date,
+        signature_name: order.signature_name,
+        items: mergeItems(order.order_items ?? initialItems),
+      };
+      const blob = await generateOrderPdf(pdfData);
+      downloadBlob(blob, `comanda-uniforme-${order.student_name}-${order.order_date}.pdf`);
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'Nu am putut descarca aceasta comanda.');
+    }
+  };
+
   return (
-    <form className="panel order-form" onSubmit={submit}>
+    <section className="order-stack">
+      <form className="panel order-form" onSubmit={submit}>
       <div className="section-title">
         <h1>Comanda uniforme 2025-2026</h1>
         <p>Completeaza tabelul, verifica marimea si descarca formularul semnat.</p>
@@ -222,6 +304,56 @@ export function OrderForm({ profile }: OrderFormProps) {
           Descarca PDF
         </button>
       </div>
-    </form>
+      </form>
+
+      <section className="panel history-panel">
+        <div className="history-header">
+          <div className="section-title">
+            <h2>Comenzile mele</h2>
+            <p>{orders.length ? `${orders.length} comenzi salvate pentru acest cont.` : 'Nu exista inca nicio comanda salvata.'}</p>
+          </div>
+          <button className="secondary-button" type="button" onClick={loadOrders} disabled={isLoadingOrders}>
+            <RefreshCw size={17} />
+            Actualizeaza
+          </button>
+        </div>
+
+        {orders.length > 0 && (
+          <div className="order-history-list">
+            {orders.map((order) => (
+              <article className="history-row" key={order.id}>
+                <div className="history-icon">
+                  <FileText size={18} />
+                </div>
+                <div>
+                  <strong>{order.student_name}</strong>
+                  <span>
+                    {order.class_group} · {new Date(order.created_at).toLocaleDateString('ro-RO')} · semnat de {order.signature_name}
+                  </span>
+                </div>
+                <button className="secondary-button" type="button" onClick={() => void downloadOrder(order)}>
+                  <Download size={17} />
+                  PDF
+                </button>
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
+    </section>
   );
+}
+
+function mergeItems(items: OrderItemInput[]) {
+  return initialItems.map((initial) => {
+    const found = items.find((item) => item.product_type === initial.product_type);
+    return found
+      ? {
+          product_type: found.product_type,
+          shirt_size: found.shirt_size,
+          quantity_set: Number(found.quantity_set ?? 0),
+          quantity_piece: Number(found.quantity_piece ?? 0),
+        }
+      : initial;
+  });
 }

@@ -40,7 +40,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
       });
       if (error) throw error;
 
-      if (data.user) {
+      if (data.user && data.session) {
         await supabase.from('profiles').upsert({
           id: data.user.id,
           email,
