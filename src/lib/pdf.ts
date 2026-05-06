@@ -29,16 +29,16 @@ export async function generateOrderPdf(data: OrderFormData) {
   page1.setFont(font);
   page2.setFont(font);
 
-  drawText(page1, data.student_name, 208, 677, 11);
-  drawText(page1, data.class_group, 232, 652, 11);
-  drawText(page1, data.parent_name, 213, 628, 11);
-  drawText(page1, data.order_date, 163, 604, 11);
+  drawText(page1, data.student_name, 208, 631, 11);
+  drawText(page1, data.class_group, 273, 609, 11);
+  drawText(page1, data.parent_name, 224, 587, 11);
+  drawText(page1, data.order_date, 138, 566, 11);
 
   data.items.forEach((item, index) => {
-    const y = index === 0 ? 500 : 466;
-    drawText(page1, item.shirt_size, 353, y, 10);
-    drawText(page1, String(item.quantity_set), 441, y, 10);
-    drawText(page1, String(item.quantity_piece), 516, y, 10);
+    const y = index === 0 ? 470 : 441;
+    drawText(page1, item.shirt_size, 358, y, 10);
+    drawText(page1, String(item.quantity_set), 461, y, 10);
+    drawText(page1, String(item.quantity_piece), 534, y, 10);
   });
 
   page2.setFont(bold);
