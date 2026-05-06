@@ -10,9 +10,6 @@ export function AuthModal({ onClose }: AuthModalProps) {
   const [mode, setMode] = useState<'login' | 'register'>('register');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [studentName, setStudentName] = useState('');
-  const [classGroup, setClassGroup] = useState('');
-  const [parentName, setParentName] = useState('');
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -39,11 +36,6 @@ export function AuthModal({ onClose }: AuthModalProps) {
         password,
         options: {
           emailRedirectTo: `${window.location.origin}${import.meta.env.BASE_URL}`,
-          data: {
-            parent_name: parentName,
-            student_name: studentName,
-            class_group: classGroup,
-          },
         },
       });
       if (error) throw error;
@@ -52,9 +44,9 @@ export function AuthModal({ onClose }: AuthModalProps) {
         await supabase.from('profiles').upsert({
           id: data.user.id,
           email,
-          parent_name: parentName,
-          student_name: studentName,
-          class_group: classGroup,
+          parent_name: '',
+          student_name: '',
+          class_group: '',
           role: 'parent',
         });
       }
@@ -75,11 +67,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
           {mode === 'register' ? <UserPlus size={22} /> : <LockKeyhole size={22} />}
         </div>
         <h2>{mode === 'register' ? 'Creeaza cont parinte' : 'Autentificare parinte'}</h2>
-        <p>
-          {mode === 'register'
-            ? 'Introdu datele elevului si ale reprezentantului legal pentru comanda.'
-            : 'Intra in cont pentru a continua formularul de comanda.'}
-        </p>
+        <p>{mode === 'register' ? 'Creeaza cont cu email si parola.' : 'Intra in cont pentru a continua formularul de comanda.'}</p>
 
         {!hasSupabaseConfig && (
           <div className="notice warning">
@@ -99,23 +87,6 @@ export function AuthModal({ onClose }: AuthModalProps) {
           Parola
           <input type="password" value={password} minLength={6} onChange={(event) => setPassword(event.target.value)} required />
         </label>
-
-        {mode === 'register' && (
-          <>
-            <label>
-              Nume si prenume elev
-              <input value={studentName} onChange={(event) => setStudentName(event.target.value)} required />
-            </label>
-            <label>
-              Clasa/Grupa (an scolar 2025-2026)
-              <input value={classGroup} onChange={(event) => setClassGroup(event.target.value)} required />
-            </label>
-            <label>
-              Parinte / Reprezentant legal
-              <input value={parentName} onChange={(event) => setParentName(event.target.value)} required />
-            </label>
-          </>
-        )}
 
         {message && <div className="notice">{message}</div>}
 

@@ -75,6 +75,15 @@ export default function App() {
 
   const isAdminRoute = route === 'admin';
   const userLabel = useMemo(() => profile?.parent_name || session?.user.email || 'Vizitator', [profile, session]);
+  const isAuthenticated = Boolean(session);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="auth-only-shell">
+        <AuthModal />
+      </div>
+    );
+  }
 
   return (
     <div className="app-shell">
