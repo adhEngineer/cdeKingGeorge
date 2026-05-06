@@ -2,7 +2,7 @@ import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import { products } from './constants';
 import type { OrderFormData } from './types';
 
-const templateUrl = `${import.meta.env.BASE_URL}formular-uniforme-2025-2026.pdf`;
+const templateUrl = `${import.meta.env.BASE_URL}formular-uniforme-2025-2026-v2.pdf`;
 
 const drawText = (
   page: import('pdf-lib').PDFPage,
