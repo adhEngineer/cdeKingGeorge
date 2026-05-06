@@ -1,0 +1,4 @@
+window.KING_GEORGE_CONFIG = {
+  SUPABASE_URL: "",
+  SUPABASE_ANON_KEY: "",
+};

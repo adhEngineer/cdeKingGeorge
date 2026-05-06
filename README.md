@@ -17,6 +17,15 @@ VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-public-anon-key
 ```
 
+Pentru GitHub Pages poti completa si `public/config.js`, apoi rulezi din nou `npm run build`:
+
+```js
+window.KING_GEORGE_CONFIG = {
+  SUPABASE_URL: "https://project-id.supabase.co",
+  SUPABASE_ANON_KEY: "public-anon-key"
+};
+```
+
 3. Ruleaza aplicatia:
 
 ```bash

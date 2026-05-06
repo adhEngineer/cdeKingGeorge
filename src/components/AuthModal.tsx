@@ -21,7 +21,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
     setMessage('');
 
     if (!supabase) {
-      setMessage('Configureaza Supabase in .env pentru autentificare.');
+      setMessage('Configureaza Supabase in public/config.js pentru conturi reale si salvare in baza de date.');
       return;
     }
 
@@ -81,7 +81,10 @@ export function AuthModal({ onClose }: AuthModalProps) {
         </p>
 
         {!hasSupabaseConfig && (
-          <div className="notice warning">Lipsesc variabilele Supabase. Aplicatia se poate construi, dar autentificarea cere `.env`.</div>
+          <div className="notice warning">
+            Aplicatia nu este conectata inca la baza de date. Completeaza `public/config.js` cu datele Supabase sau foloseste
+            temporar modul local pentru test PDF.
+          </div>
         )}
 
         <label>
