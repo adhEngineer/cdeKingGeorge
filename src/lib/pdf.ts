@@ -1,5 +1,4 @@
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
-import { products } from './constants';
 import type { OrderFormData } from './types';
 
 const templateUrl = `${import.meta.env.BASE_URL}formular-uniforme-2025-2026-v2.pdf`;
@@ -42,17 +41,7 @@ export async function generateOrderPdf(data: OrderFormData) {
   });
 
   page2.setFont(bold);
-  drawText(page2, data.signature_name, 350, 224, 12);
-  page2.setFont(font);
-  drawText(page2, data.order_date, 350, 204, 9);
-
-  const summary = data.items
-    .map((item) => {
-      const product = products.find((entry) => entry.id === item.product_type);
-      return `${product?.label ?? item.product_type}: marime ${item.shirt_size}, set ${item.quantity_set}, buc ${item.quantity_piece}`;
-    })
-    .join(' | ');
-  drawText(page2, summary.slice(0, 110), 52, 92, 7);
+  drawText(page2, data.signature_name, 205, 55, 12);
 
   const bytes = await pdfDoc.save();
   const arrayBuffer = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
