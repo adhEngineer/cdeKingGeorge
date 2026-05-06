@@ -38,6 +38,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
         email,
         password,
         options: {
+          emailRedirectTo: `${window.location.origin}${import.meta.env.BASE_URL}`,
           data: {
             parent_name: parentName,
             student_name: studentName,
