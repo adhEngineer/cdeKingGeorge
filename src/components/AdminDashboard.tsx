@@ -80,7 +80,7 @@ export function AdminDashboard({ profile }: AdminDashboardProps) {
       <section className="panel admin-panel">
         <div className="section-title">
           <h1>Admin comenzi</h1>
-          <p>Accesul este disponibil doar pentru utilizatorii cu rol admin in Supabase.</p>
+          <p>Accesul este disponibil doar pentru administrator</p>
         </div>
       </section>
     );
