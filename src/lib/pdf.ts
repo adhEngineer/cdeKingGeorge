@@ -30,9 +30,9 @@ export async function generateOrderPdf(data: OrderFormData) {
   page1.setFont(font);
   page2.setFont(font);
 
-  drawText(page1, data.student_name, 208, 630, 14, bold);
-  drawText(page1, data.class_group, 273, 608, 14, bold);
-  drawText(page1, data.parent_name, 224, 586, 14, bold);
+  drawText(page1, data.student_name, 208, 634, 14, bold);
+  drawText(page1, data.class_group, 273, 612, 14, bold);
+  drawText(page1, data.parent_name, 224, 590, 14, bold);
   drawText(page1, data.order_date, 138, 565, 14, bold);
 
   data.items.forEach((item, index) => {
