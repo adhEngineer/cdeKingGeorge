@@ -267,6 +267,8 @@ export function OrderForm({ profile }: OrderFormProps) {
         </table>
       </div>
 
+      <p className="size-warning">Alege dimensiunea tricourilor conform tabelului</p>
+
       <div className="signature-row">
         <label>
           Semnatura Beneficiar - nume tastat

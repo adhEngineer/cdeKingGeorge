@@ -372,7 +372,14 @@ tr:last-child td {
   grid-template-columns: minmax(0, 1fr) 180px;
   gap: 16px;
   align-items: end;
-  margin-top: 18px;
+  margin-top: 12px;
+}
+
+.size-warning {
+  margin-top: 10px;
+  color: #d71920;
+  font-size: 10px;
+  font-weight: 800;
 }
 
 .total-box {
@@ -564,6 +571,10 @@ button:disabled {
 
 .notes-panel strong {
   color: var(--ink);
+}
+
+.notes-panel .deadline {
+  color: #d71920;
 }
 
 .filters {

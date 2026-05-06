@@ -148,7 +148,8 @@ export default function App() {
                 <ol>
                   <li>Formularul este completat si semnat de Beneficiar/Parinte.</li>
                   <li>
-                    <strong>Comanda se plaseaza pentru anul scolar 2025-2026 cel tarziu pana pe 30 mai 2025.</strong>
+                    <strong>Comanda se plaseaza pentru anul scolar 2025-2026 cel tarziu pana pe </strong>
+                    <strong className="deadline">30 mai 2025.</strong>
                   </li>
                   <li>
                     <strong>Plata se va efectua integral in avans la data comenzii.</strong>
