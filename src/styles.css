@@ -153,7 +153,7 @@ nav a.active {
 
 .main {
   display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(320px, 0.9fr);
+  grid-template-columns: minmax(0, 1.25fr) minmax(390px, 1fr);
   gap: 22px;
   width: min(1420px, calc(100% - 36px));
   margin: 26px auto 44px;
@@ -309,8 +309,55 @@ tr:last-child td {
 
 .compact th,
 .compact td {
-  padding: 8px 10px;
-  font-size: 12px;
+  padding: 7px 8px;
+  font-size: 11px;
+}
+
+.measurement-layout {
+  display: grid;
+  grid-template-columns: minmax(250px, 1fr) minmax(190px, 0.78fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.shirt-sketch {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+}
+
+.shirt-sketch img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.recommendations {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.recommendations h3 {
+  margin: 0 0 8px;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.25;
+  text-decoration: underline;
+}
+
+.recommendations ol {
+  margin: 0;
+  padding-left: 18px;
+  color: #263831;
+  font-size: 11.5px;
+  line-height: 1.38;
+}
+
+.recommendations li + li {
+  margin-top: 5px;
 }
 
 .signature-row {
@@ -500,7 +547,16 @@ button:disabled {
   margin: 14px 0 0;
   padding-left: 18px;
   color: var(--muted);
-  line-height: 1.55;
+  font-size: 11.5px;
+  line-height: 1.38;
+}
+
+.notes-panel li + li {
+  margin-top: 4px;
+}
+
+.notes-panel strong {
+  color: var(--ink);
 }
 
 .filters {
@@ -589,6 +645,10 @@ button:disabled {
   }
 
   .main {
+    grid-template-columns: 1fr;
+  }
+
+  .measurement-layout {
     grid-template-columns: 1fr;
   }
 }

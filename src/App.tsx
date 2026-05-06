@@ -147,9 +147,28 @@ export default function App() {
                 <h2>Conditii comanda</h2>
                 <ol>
                   <li>Formularul este completat si semnat de Beneficiar/Parinte.</li>
-                  <li>Plata se efectueaza integral in avans la data comenzii.</li>
-                  <li>Produsele personalizate la cerere nu pot fi returnate.</li>
-                  <li>Daca oscilati intre doua masuri, alegeti masura mai mare.</li>
+                  <li>
+                    <strong>Comanda se plaseaza pentru anul scolar 2025-2026 cel tarziu pana pe 30 mai 2025.</strong>
+                  </li>
+                  <li>
+                    <strong>Plata se va efectua integral in avans la data comenzii.</strong>
+                  </li>
+                  <li>
+                    Nu pot fi returnate produse confectionate la cerere, prototip unic reprezentativ al unei institutii personalizat cu
+                    inscrisurile acesteia.
+                  </li>
+                  <li>Prestatorul nu isi asuma o masura gresit comunicata de catre Beneficiar, conform comanda trimisa.</li>
+                  <li>NU realizam inlocuiri, retusuri si modificari. Masurile sunt standard.</li>
+                  <li>
+                    Comanda se va realiza in urma probarii mostrelor la secretariatul institutiei sau in baza tabelului standard de masuri
+                    (vezi pagina 2).
+                  </li>
+                  <li>Rugam sa urmariti in tabel la ce dimensiuni se incadreaza copilul dumneavoastra.</li>
+                  <li>Daca OSCILATI intre doua masuri va recomandam sa alegeti masura mai mare.</li>
+                  <li>
+                    Recomandam, de asemenea, sa comandati cu o masura mai mare daca comanda se va plasa in vara pentru luna septembrie
+                    pentru ciclul primar unde copiii sunt in crestere.
+                  </li>
                 </ol>
               </section>
             </aside>
