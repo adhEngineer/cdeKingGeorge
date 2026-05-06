@@ -9,9 +9,9 @@
   --ink: #12201b;
   --muted: #5c6b63;
   --line: #dbe5df;
-  --green: #0f6b4f;
-  --green-dark: #0a4f3a;
-  --green-soft: #e3f1eb;
+  --green: #0ac8f2;
+  --green-dark: #057f9f;
+  --green-soft: #e5faff;
   --blue: #245a7c;
   --danger: #a33a2a;
   --shadow: 0 18px 45px rgba(22, 43, 35, 0.09);
@@ -42,7 +42,7 @@ a {
 .app-shell {
   min-height: 100vh;
   background:
-    linear-gradient(180deg, rgba(15, 107, 79, 0.07), transparent 280px),
+    linear-gradient(180deg, rgba(10, 200, 242, 0.12), transparent 280px),
     var(--bg);
 }
 
@@ -52,7 +52,7 @@ a {
   place-items: center;
   padding: 22px;
   background:
-    linear-gradient(180deg, rgba(15, 107, 79, 0.08), transparent 300px),
+    linear-gradient(180deg, rgba(10, 200, 242, 0.13), transparent 300px),
     var(--bg);
 }
 
@@ -82,9 +82,16 @@ a {
   width: 42px;
   height: 42px;
   place-items: center;
-  color: white;
-  background: var(--green);
+  background: white;
+  border: 1px solid #d6eef4;
   border-radius: 8px;
+}
+
+.brand-mark img {
+  display: block;
+  width: 30px;
+  height: 34px;
+  object-fit: contain;
 }
 
 .brand strong,
@@ -241,7 +248,7 @@ select {
 input:focus,
 select:focus {
   border-color: var(--green);
-  box-shadow: 0 0 0 3px rgba(15, 107, 79, 0.14);
+  box-shadow: 0 0 0 3px rgba(10, 200, 242, 0.18);
 }
 
 .input-with-icon,
@@ -488,12 +495,12 @@ tr:last-child td {
 
 .primary-button {
   padding: 0 16px;
-  color: white;
+  color: #06313a;
   background: var(--green);
 }
 
 .primary-button:hover {
-  background: var(--green-dark);
+  background: #08b6dc;
 }
 
 .secondary-button {
@@ -628,7 +635,7 @@ button:disabled {
   width: 46px;
   height: 46px;
   place-items: center;
-  color: white;
+  color: #06313a;
   border-radius: 8px;
   background: var(--green);
 }

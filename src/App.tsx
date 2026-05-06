@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
-import { GraduationCap, LogOut, ShieldCheck } from 'lucide-react';
+import { LogOut, ShieldCheck } from 'lucide-react';
 import type { Session } from '@supabase/supabase-js';
 import { AuthModal } from './components/AuthModal';
 import { OrderForm } from './components/OrderForm';
@@ -90,7 +90,7 @@ export default function App() {
       <header className="topbar">
         <a className="brand" href={`${import.meta.env.BASE_URL}`}>
           <span className="brand-mark">
-            <GraduationCap size={22} />
+            <img src={`${import.meta.env.BASE_URL}kg-logo.png`} alt="King George" />
           </span>
           <span>
             <strong>King George Uniforme</strong>
