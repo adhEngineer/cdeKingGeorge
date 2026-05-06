@@ -45,6 +45,8 @@ Adauga in repository secrets:
 
 Pentru deploy fara GitHub Actions, ruleaza `npm run build`, apoi seteaza GitHub Pages la `Deploy from a branch`, branch `main`, folder `/docs`.
 
+Repository-ul include si un build static la root pentru cazul in care GitHub Pages ramane setat pe folderul `/root`.
+
 Pentru deploy automat, adauga un GitHub Actions workflow care ruleaza `npm ci` si `npm run build`, apoi publica folderul `docs` pe GitHub Pages. Daca folosesti un Personal Access Token pentru push, acesta trebuie sa aiba scope `workflow` ca sa poata urca fisiere in `.github/workflows`.
 
 Aplicatia admin este disponibila la `#/admin`.
