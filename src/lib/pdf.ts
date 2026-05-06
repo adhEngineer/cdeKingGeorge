@@ -41,7 +41,7 @@ export async function generateOrderPdf(data: OrderFormData) {
   drawText(page1, String(data.set_quantity), 461, 456, 10);
 
   page2.setFont(bold);
-  drawText(page2, data.signature_name, 205, 55, 12);
+  drawText(page2, data.signature_name, 232, 61, 12);
 
   const bytes = await pdfDoc.save();
   const arrayBuffer = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
