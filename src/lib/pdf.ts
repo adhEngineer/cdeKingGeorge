@@ -3,6 +3,17 @@ import type { OrderFormData } from './types';
 
 const templateUrl = `${import.meta.env.BASE_URL}formular-uniforme-2026-2027.pdf`;
 
+const toPdfSafeText = (text: string) =>
+  text
+    .replace(/[ăâ]/g, 'a')
+    .replace(/[ĂÂ]/g, 'A')
+    .replace(/[î]/g, 'i')
+    .replace(/[Î]/g, 'I')
+    .replace(/[șş]/g, 's')
+    .replace(/[ȘŞ]/g, 'S')
+    .replace(/[țţ]/g, 't')
+    .replace(/[ȚŢ]/g, 'T');
+
 const drawText = (
   page: import('pdf-lib').PDFPage,
   text: string,
@@ -11,7 +22,7 @@ const drawText = (
   size = 10,
   font?: import('pdf-lib').PDFFont,
 ) => {
-  page.drawText(text || '-', {
+  page.drawText(toPdfSafeText(text || '-'), {
     x,
     y,
     size,
@@ -28,7 +39,7 @@ const drawBlackText = (
   size = 10,
   font?: import('pdf-lib').PDFFont,
 ) => {
-  page.drawText(text, {
+  page.drawText(toPdfSafeText(text), {
     x,
     y,
     size,
