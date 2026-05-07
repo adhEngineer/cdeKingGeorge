@@ -18,10 +18,17 @@ const initialItems: OrderItemInput[] = products.map((product) => ({
   quantity_piece: 0,
 }));
 
+const classGroupOptions = [
+  'Gradinita',
+  'Primar (clasele I-IV)',
+  'Gimnaziu (clasele V-VIII)',
+  'Liceu (clasele IX-XII)',
+];
+
 export function OrderForm({ profile }: OrderFormProps) {
   const [form, setForm] = useState<OrderFormData>({
     student_name: profile?.student_name ?? '',
-    class_group: profile?.class_group ?? '',
+    class_group: normalizeClassGroup(profile?.class_group ?? ''),
     parent_name: profile?.parent_name ?? '',
     order_date: today,
     signature_name: profile?.parent_name ?? '',
@@ -51,7 +58,7 @@ export function OrderForm({ profile }: OrderFormProps) {
       if (latest) {
         setForm({
           student_name: latest.student_name,
-          class_group: latest.class_group,
+          class_group: normalizeClassGroup(latest.class_group),
           parent_name: latest.parent_name,
           order_date: today,
           signature_name: latest.signature_name || latest.parent_name,
@@ -62,7 +69,7 @@ export function OrderForm({ profile }: OrderFormProps) {
         setForm((current) => ({
           ...current,
           student_name: profile.student_name || current.student_name,
-          class_group: profile.class_group || current.class_group,
+          class_group: normalizeClassGroup(profile.class_group) || current.class_group,
           parent_name: profile.parent_name || current.parent_name,
           signature_name: profile.parent_name || current.signature_name,
         }));
@@ -87,6 +94,8 @@ export function OrderForm({ profile }: OrderFormProps) {
     return pieces + sets;
   }, [form.items, form.set_quantity]);
 
+  const uniformColor = getUniformColor(form.class_group);
+
   const updateItem = (index: number, patch: Partial<OrderItemInput>) => {
     setForm((current) => ({
       ...current,
@@ -108,6 +117,11 @@ export function OrderForm({ profile }: OrderFormProps) {
     setIsSaving(true);
 
     try {
+      if (!form.class_group) {
+        setStatus('Alege Clasa/Grupa pentru anul scolar urmator.');
+        return;
+      }
+
       const pdf = await buildPdf();
 
       if (!supabase || !profile) {
@@ -205,7 +219,22 @@ export function OrderForm({ profile }: OrderFormProps) {
         </label>
         <label>
           Clasa/Grupa
-          <input value={form.class_group} onChange={(event) => setForm({ ...form, class_group: event.target.value })} required />
+          <select value={form.class_group} onChange={(event) => setForm({ ...form, class_group: event.target.value })} required>
+            <option value="">Alege clasa/grupa</option>
+            {classGroupOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <span className="class-warning">Alege clasa pentru anul scolar urmator, nu clasa in care este acum copilul.</span>
+        </label>
+        <label>
+          Culoarea uniformei
+          <div className="uniform-color-field">
+            <span className={`uniform-swatch ${uniformColor.key}`} />
+            <strong>{uniformColor.label}</strong>
+          </div>
         </label>
         <label>
           Parinte / Reprezentant legal
@@ -360,4 +389,21 @@ function mergeItems(items: OrderItemInput[]) {
 
 function getOrderSetQuantity(items: OrderItemInput[]) {
   return Math.max(0, ...items.map((item) => Number(item.quantity_set ?? 0)));
+}
+
+function normalizeClassGroup(value: string) {
+  return classGroupOptions.includes(value) ? value : '';
+}
+
+function getUniformColor(classGroup: string) {
+  if (classGroup === 'Gradinita') {
+    return { key: 'red', label: 'Rosie' };
+  }
+  if (classGroup === 'Primar (clasele I-IV)') {
+    return { key: 'blue', label: 'Albastra' };
+  }
+  if (classGroup === 'Gimnaziu (clasele V-VIII)' || classGroup === 'Liceu (clasele IX-XII)') {
+    return { key: 'white', label: 'Alba' };
+  }
+  return { key: 'empty', label: 'Selecteaza clasa/grupa' };
 }
