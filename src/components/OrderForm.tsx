@@ -20,7 +20,7 @@ const initialItems: OrderItemInput[] = products.map((product) => ({
 
 const classGroupOptions = [
   'Gradinita',
-  'Primar (clasele I-IV)',
+  'Primar (clasele Pregatitoare - IV)',
   'Gimnaziu (clasele V-VIII)',
   'Liceu (clasele IX-XII)',
 ];
@@ -396,7 +396,7 @@ function getUniformColor(classGroup: string) {
   if (classGroup === 'Gradinita') {
     return { key: 'red', label: 'Rosie' };
   }
-  if (classGroup === 'Primar (clasele I-IV)') {
+  if (classGroup === 'Primar (clasele Pregatitoare - IV)') {
     return { key: 'blue', label: 'Albastra' };
   }
   if (classGroup === 'Gimnaziu (clasele V-VIII)' || classGroup === 'Liceu (clasele IX-XII)') {
