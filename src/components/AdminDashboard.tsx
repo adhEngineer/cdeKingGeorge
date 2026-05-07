@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Download, FileArchive, RefreshCw, Search, Sheet } from 'lucide-react';
-import { exportOrderPdfs, exportOrdersXlsx } from '../lib/export';
+import { exportOrderPdfs, exportOrdersXlsx, exportSupplierSummaryXlsx } from '../lib/export';
 import { supabase } from '../lib/supabase';
 import type { Order, Profile } from '../lib/types';
 import { getOrderSetQuantity, getSupplierSummaryRows, getUniformColor, uniformColorOptions } from '../lib/uniforms';
@@ -184,9 +184,24 @@ export function AdminDashboard({ profile }: AdminDashboardProps) {
       {status && <div className="notice">{status}</div>}
 
       <section className="supplier-summary">
-        <div className="section-title">
-          <h2>Total pentru furnizor</h2>
-          <p>Totalul include seturile ca 2 tricouri cu maneca scurta si 2 tricouri cu maneca lunga.</p>
+        <div className="supplier-summary-header">
+          <div className="section-title">
+            <h2>Total pentru furnizor</h2>
+            <p>Totalul include seturile ca 2 tricouri cu maneca scurta si 2 tricouri cu maneca lunga.</p>
+          </div>
+          <button
+            className="secondary-button"
+            onClick={async () => {
+              try {
+                await exportSupplierSummaryXlsx(filtered);
+              } catch (error) {
+                setStatus(error instanceof Error ? error.message : 'Nu am putut exporta totalul pentru furnizor.');
+              }
+            }}
+          >
+            <Sheet size={18} />
+            Export furnizor
+          </button>
         </div>
         <div className="table-scroll">
           <table>

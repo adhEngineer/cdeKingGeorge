@@ -662,6 +662,14 @@ button:disabled {
   background: #fbfdfc;
 }
 
+.supplier-summary-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
 .supplier-summary .section-title {
   margin-bottom: 0;
 }

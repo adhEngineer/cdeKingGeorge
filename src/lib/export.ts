@@ -82,6 +82,38 @@ export async function exportOrdersXlsx(orders: Order[]) {
   URL.revokeObjectURL(url);
 }
 
+export async function exportSupplierSummaryXlsx(orders: Order[]) {
+  const supplierRows = getSupplierSummaryRows(orders).map((row) => ({
+    Culoare: row.colorLabel,
+    Maneca: row.sleeveLabel,
+    'Marime tricou': row.shirtSize,
+    'Total tricouri': row.total,
+  }));
+
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet('Total furnizor');
+  worksheet.columns = [
+    { header: 'Culoare', key: 'Culoare', width: 18 },
+    { header: 'Maneca', key: 'Maneca', width: 18 },
+    { header: 'Marime tricou', key: 'Marime tricou', width: 16 },
+    { header: 'Total tricouri', key: 'Total tricouri', width: 18 },
+  ];
+  worksheet.addRows(supplierRows);
+  worksheet.getRow(1).font = { bold: true };
+  worksheet.views = [{ state: 'frozen', ySplit: 1 }];
+
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], {
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = `total-furnizor-uniforme-${new Date().toISOString().slice(0, 10)}.xlsx`;
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
 export async function exportOrderPdfs(orders: Order[]) {
   if (!supabase) {
     throw new Error('Supabase nu este configurat.');
