@@ -1,6 +1,6 @@
 # King George Uniforme
 
-Aplicatie web pentru comenzile de uniforme scolare 2025-2026.
+Aplicatie web pentru comenzile de uniforme scolare 2026-2027.
 
 ## Dezvoltare locala
 

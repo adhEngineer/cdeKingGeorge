@@ -94,7 +94,7 @@ export default function App() {
           </span>
           <span>
             <strong>King George Uniforme</strong>
-            <small>Comenzi scolare 2025-2026</small>
+            <small>Comenzi scolare 2026-2027</small>
           </span>
         </a>
         <nav>
@@ -148,8 +148,8 @@ export default function App() {
                 <ol>
                   <li>Formularul este completat si semnat de Beneficiar/Parinte.</li>
                   <li>
-                    <strong>Comanda se plaseaza pentru anul scolar 2025-2026 cel tarziu pana pe </strong>
-                    <strong className="deadline">30 mai 2025.</strong>
+                    <strong>Comanda se plaseaza pentru anul scolar 2026-2027 cel tarziu pana pe </strong>
+                    <strong className="deadline">30 mai 2026.</strong>
                   </li>
                   <li>
                     <strong>Plata se va efectua integral in avans la data comenzii.</strong>

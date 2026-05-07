@@ -194,7 +194,7 @@ export function OrderForm({ profile }: OrderFormProps) {
     <section className="order-stack">
       <form className="panel order-form" onSubmit={submit}>
       <div className="section-title">
-        <h1>Comanda uniforme 2025-2026</h1>
+        <h1>Comanda uniforme 2026-2027</h1>
         <p>Completeaza tabelul, verifica marimea si descarca formularul semnat.</p>
       </div>
 
