@@ -1,7 +1,7 @@
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import type { OrderFormData } from './types';
 
-const templateUrl = `${import.meta.env.BASE_URL}formular-uniforme-2025-2026-v2.pdf`;
+const templateUrl = `${import.meta.env.BASE_URL}formular-uniforme-2026-2027.pdf`;
 
 const drawText = (
   page: import('pdf-lib').PDFPage,
@@ -30,60 +30,20 @@ export async function generateOrderPdf(data: OrderFormData) {
   page1.setFont(font);
   page2.setFont(font);
 
-  page1.drawRectangle({
-    x: 205,
-    y: 661,
-    width: 205,
-    height: 26,
-    color: rgb(1, 1, 1),
-  });
-  drawText(page1, 'AN SCOLAR 2026 - 2027', 214, 668, 16, bold);
-  page1.drawLine({
-    start: { x: 214, y: 665 },
-    end: { x: 394, y: 665 },
-    thickness: 1,
-    color: rgb(0.06, 0.12, 0.16),
-  });
-
-  page1.drawRectangle({
-    x: 76,
-    y: 248,
-    width: 456,
-    height: 34,
-    color: rgb(1, 1, 1),
-  });
-  drawText(page1, '2) Comanda se plaseaza pentru anul scolar 2026 - 2027 cel tarziu pana pe', 78, 267, 11, bold);
-  page1.drawText('30 mai 2026.', {
-    x: 78,
-    y: 252,
-    size: 11,
-    font: bold,
-    color: rgb(0.85, 0.1, 0.1),
-  });
-
-  page1.drawRectangle({
-    x: 189,
-    y: 606,
-    width: 71,
-    height: 16,
-    color: rgb(1, 1, 1),
-  });
-  drawText(page1, '2026-2027', 190, 611, 10, bold);
-
-  drawText(page1, data.student_name, 208, 634, 14, bold);
-  drawText(page1, data.class_group, 273, 612, 14, bold);
-  drawText(page1, data.parent_name, 224, 590, 14, bold);
-  drawText(page1, data.order_date, 138, 565, 14, bold);
+  drawText(page1, data.student_name, 218, 595, 14, bold);
+  drawText(page1, data.class_group, 278, 575, 14, bold);
+  drawText(page1, data.parent_name, 234, 554, 14, bold);
+  drawText(page1, data.order_date, 160, 534, 14, bold);
 
   data.items.forEach((item, index) => {
-    const y = index === 0 ? 470 : 441;
+    const y = index === 0 ? 443 : 416;
     drawText(page1, item.shirt_size, 356, y - 1, 13, bold);
-    drawText(page1, String(item.quantity_piece), 532, y - 1, 13, bold);
+    drawText(page1, String(item.quantity_piece), 536, y - 1, 13, bold);
   });
-  drawText(page1, String(data.set_quantity), 459, 455, 13, bold);
+  drawText(page1, String(data.set_quantity), 462, 428, 13, bold);
 
   page2.setFont(bold);
-  drawText(page2, data.signature_name, 224, 60, 15, bold);
+  drawText(page2, data.signature_name, 232, 56, 15, bold);
 
   const bytes = await pdfDoc.save();
   const arrayBuffer = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
