@@ -76,6 +76,7 @@ export default function App() {
   const isAdminRoute = route === 'admin';
   const userLabel = useMemo(() => profile?.parent_name || session?.user.email || 'Vizitator', [profile, session]);
   const isAuthenticated = Boolean(session);
+  const canAccessAdmin = profile?.role === 'admin';
 
   if (!isAuthenticated) {
     return (
@@ -101,10 +102,12 @@ export default function App() {
           <a className={!isAdminRoute ? 'active' : ''} href={`${import.meta.env.BASE_URL}`}>
             Formular
           </a>
-          <a className={isAdminRoute ? 'active' : ''} href="#/admin">
-            <ShieldCheck size={16} />
-            Admin
-          </a>
+          {canAccessAdmin && (
+            <a className={isAdminRoute ? 'active' : ''} href="#/admin">
+              <ShieldCheck size={16} />
+              Admin
+            </a>
+          )}
         </nav>
         <div className="user-box">
           <span>{userLabel}</span>
