@@ -342,6 +342,17 @@ select:focus {
   min-width: 76px;
 }
 
+.quantity-input {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.quantity-input::-webkit-outer-spin-button,
+.quantity-input::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
 table {
   width: 100%;
   min-width: 620px;

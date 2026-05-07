@@ -258,10 +258,15 @@ export function OrderForm({ profile }: OrderFormProps) {
                   </td>
                   <td>
                     <input
-                      type="number"
-                      min="0"
-                      value={item.quantity_piece}
-                      onChange={(event) => updateItem(index, { quantity_piece: Number(event.target.value) })}
+                      className="quantity-input"
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      value={item.quantity_piece ? String(item.quantity_piece) : ''}
+                      onChange={(event) => {
+                        const digitsOnly = event.target.value.replace(/\D/g, '');
+                        updateItem(index, { quantity_piece: digitsOnly ? Number(digitsOnly) : 0 });
+                      }}
                     />
                   </td>
                 </tr>
@@ -277,8 +282,8 @@ export function OrderForm({ profile }: OrderFormProps) {
         <strong>Nota:</strong>
         <span>- conform contract educational, setul de uniforme este compus din 2 tricouri cu maneca scurta si 2 tricouri cu maneca lunga in valoare de 650lei/set.</span>
         <span>- la solicitarea pe bucata (exceptand setul conform contract) pretul este:</span>
-        <span className="note-bullet">● tricou cu maneca scurta - 150lei/buc.</span>
-        <span className="note-bullet">● tricou cu maneca lunga - 175lei/buc.</span>
+        <span className="note-bullet">{'\u25CF'} tricou cu maneca scurta - 150lei/buc.</span>
+        <span className="note-bullet">{'\u25CF'} tricou cu maneca lunga - 175lei/buc.</span>
       </div>
 
       <div className="signature-row">
