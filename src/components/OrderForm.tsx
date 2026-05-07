@@ -217,7 +217,7 @@ export function OrderForm({ profile }: OrderFormProps) {
           Nume si prenume elev
           <input value={form.student_name} onChange={(event) => setForm({ ...form, student_name: event.target.value })} required />
         </label>
-        <label>
+        <label className="class-group-field">
           Clasa/Grupa
           <select value={form.class_group} onChange={(event) => setForm({ ...form, class_group: event.target.value })} required>
             <option value="">Alege clasa/grupa</option>
@@ -228,13 +228,10 @@ export function OrderForm({ profile }: OrderFormProps) {
             ))}
           </select>
           <span className="class-warning">Alege clasa pentru anul scolar urmator, nu clasa in care este acum copilul.</span>
-        </label>
-        <label>
-          Culoarea uniformei
-          <div className="uniform-color-field">
+          <span className="uniform-color-field" aria-label={`Culoarea uniformei: ${uniformColor.label}`}>
             <span className={`uniform-swatch ${uniformColor.key}`} />
             <strong>{uniformColor.label}</strong>
-          </div>
+          </span>
         </label>
         <label>
           Parinte / Reprezentant legal

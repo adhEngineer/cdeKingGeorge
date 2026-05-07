@@ -259,24 +259,25 @@ select:focus {
 }
 
 .uniform-color-field {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
-  min-height: 42px;
-  padding: 0 12px;
+  gap: 7px;
+  width: fit-content;
+  min-height: 28px;
+  padding: 0 9px;
   border: 1px solid #cfdcd5;
   border-radius: 7px;
   background: white;
 }
 
 .uniform-color-field strong {
-  font-size: 13px;
+  font-size: 11px;
 }
 
 .uniform-swatch {
   display: inline-block;
-  width: 22px;
-  height: 22px;
+  width: 15px;
+  height: 15px;
   border-radius: 999px;
   border: 1px solid #c8d4cf;
 }
