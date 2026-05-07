@@ -25,6 +25,8 @@ export type Order = {
   order_date: string;
   signature_name: string;
   status: string;
+  is_paid?: boolean;
+  notes?: string;
   created_at: string;
   order_items?: OrderItemInput[];
   order_files?: { storage_path: string; file_name: string }[];

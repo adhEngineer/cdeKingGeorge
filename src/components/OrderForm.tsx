@@ -4,6 +4,7 @@ import { products, setPrice, shirtSizes } from '../lib/constants';
 import { downloadBlob, generateOrderPdf } from '../lib/pdf';
 import { supabase } from '../lib/supabase';
 import type { Order, OrderFormData, OrderItemInput, Profile } from '../lib/types';
+import { classGroupOptions, getOrderSetQuantity, getUniformColor, normalizeClassGroup } from '../lib/uniforms';
 
 type OrderFormProps = {
   profile: Profile | null;
@@ -17,13 +18,6 @@ const initialItems: OrderItemInput[] = products.map((product) => ({
   quantity_set: 0,
   quantity_piece: 0,
 }));
-
-const classGroupOptions = [
-  'Gradinita',
-  'Primar (clasele Pregatitoare - IV)',
-  'Gimnaziu (clasele V-VIII)',
-  'Liceu (clasele IX-XII)',
-];
 
 export function OrderForm({ profile }: OrderFormProps) {
   const [form, setForm] = useState<OrderFormData>({
@@ -382,25 +376,4 @@ function mergeItems(items: OrderItemInput[]) {
         }
       : initial;
   });
-}
-
-function getOrderSetQuantity(items: OrderItemInput[]) {
-  return Math.max(0, ...items.map((item) => Number(item.quantity_set ?? 0)));
-}
-
-function normalizeClassGroup(value: string) {
-  return classGroupOptions.includes(value) ? value : '';
-}
-
-function getUniformColor(classGroup: string) {
-  if (classGroup === 'Gradinita') {
-    return { key: 'red', label: 'Rosie' };
-  }
-  if (classGroup === 'Primar (clasele Pregatitoare - IV)') {
-    return { key: 'blue', label: 'Albastra' };
-  }
-  if (classGroup === 'Gimnaziu (clasele V-VIII)' || classGroup === 'Liceu (clasele IX-XII)') {
-    return { key: 'white', label: 'Alba' };
-  }
-  return { key: 'empty', label: 'Selecteaza clasa/grupa' };
 }

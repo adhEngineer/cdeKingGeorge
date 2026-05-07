@@ -2,18 +2,23 @@ import JSZip from 'jszip';
 import ExcelJS from 'exceljs';
 import { supabase } from './supabase';
 import type { Order } from './types';
+import { getOrderSetQuantity, getSupplierSummaryRows, getUniformColor } from './uniforms';
 
 export async function exportOrdersXlsx(orders: Order[]) {
   const rows = orders.flatMap((order) => {
     const items = order.order_items?.length ? order.order_items : [undefined];
-    const setQuantity = Math.max(0, ...(order.order_items ?? []).map((item) => Number(item.quantity_set ?? 0)));
+    const setQuantity = getOrderSetQuantity(order.order_items ?? []);
+    const uniformColor = getUniformColor(order.class_group);
     return items.map((item) => ({
       'Data creare': new Date(order.created_at).toLocaleString('ro-RO'),
       'Data comenzii': order.order_date,
       Elev: order.student_name,
       'Clasa/Grupa': order.class_group,
+      'Culoare uniforma': uniformColor.label,
       Parinte: order.parent_name,
       Status: order.status,
+      Achitata: order.is_paid ? 'Da' : 'Nu',
+      Observatii: order.notes ?? '',
       Produs: item?.product_type === 'short_sleeve' ? 'Tricou maneca scurta' : item?.product_type === 'long_sleeve' ? 'Tricou maneca lunga' : '',
       'Nr. tricou': item?.shirt_size ?? '',
       'Cantitate set': item?.product_type === 'short_sleeve' ? setQuantity : '',
@@ -29,8 +34,11 @@ export async function exportOrdersXlsx(orders: Order[]) {
     'Data comenzii': '',
     Elev: '',
     'Clasa/Grupa': '',
+    'Culoare uniforma': '',
     Parinte: '',
     Status: '',
+    Achitata: '',
+    Observatii: '',
     Produs: '',
     'Nr. tricou': '',
     'Cantitate set': '',
@@ -44,6 +52,23 @@ export async function exportOrdersXlsx(orders: Order[]) {
   worksheet.addRows(rows);
   worksheet.getRow(1).font = { bold: true };
   worksheet.views = [{ state: 'frozen', ySplit: 1 }];
+
+  const supplierRows = getSupplierSummaryRows(orders).map((row) => ({
+    Culoare: row.colorLabel,
+    Maneca: row.sleeveLabel,
+    'Nr. tricou': row.shirtSize,
+    'Total tricouri': row.total,
+  }));
+  const supplierWorksheet = workbook.addWorksheet('Total furnizor');
+  supplierWorksheet.columns = [
+    { header: 'Culoare', key: 'Culoare', width: 18 },
+    { header: 'Maneca', key: 'Maneca', width: 18 },
+    { header: 'Nr. tricou', key: 'Nr. tricou', width: 14 },
+    { header: 'Total tricouri', key: 'Total tricouri', width: 18 },
+  ];
+  supplierWorksheet.addRows(supplierRows);
+  supplierWorksheet.getRow(1).font = { bold: true };
+  supplierWorksheet.views = [{ state: 'frozen', ySplit: 1 }];
 
   const buffer = await workbook.xlsx.writeBuffer();
   const blob = new Blob([buffer], {

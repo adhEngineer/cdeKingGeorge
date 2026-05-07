@@ -19,6 +19,8 @@ create table if not exists public.orders (
   order_date date not null default current_date,
   signature_name text not null,
   status text not null default 'submitted',
+  is_paid boolean not null default false,
+  notes text not null default '',
   created_at timestamptz not null default now()
 );
 
@@ -81,6 +83,12 @@ drop policy if exists "orders insert own" on public.orders;
 create policy "orders insert own"
 on public.orders for insert
 with check (auth.uid() = user_id);
+
+drop policy if exists "orders admin update" on public.orders;
+create policy "orders admin update"
+on public.orders for update
+using (public.is_admin(auth.uid()))
+with check (public.is_admin(auth.uid()));
 
 drop policy if exists "order items read own or admin" on public.order_items;
 create policy "order items read own or admin"
