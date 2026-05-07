@@ -475,6 +475,10 @@ tr:last-child td {
   line-height: 1.5;
 }
 
+.note-bullet {
+  padding-left: 16px;
+}
+
 .actions,
 .admin-header,
 .filters {

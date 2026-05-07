@@ -275,8 +275,10 @@ export function OrderForm({ profile }: OrderFormProps) {
 
       <div className="notes">
         <strong>Nota:</strong>
-        <span>Pret tricou cu maneca scurta - 150 lei</span>
-        <span>Pret tricou cu maneca lunga - 175 lei</span>
+        <span>- conform contract educational, setul de uniforme este compus din 2 tricouri cu maneca scurta si 2 tricouri cu maneca lunga in valoare de 650lei/set.</span>
+        <span>- la solicitarea pe bucata (exceptand setul conform contract) pretul este:</span>
+        <span className="note-bullet">● tricou cu maneca scurta - 150lei/buc.</span>
+        <span className="note-bullet">● tricou cu maneca lunga - 175lei/buc.</span>
       </div>
 
       <div className="signature-row">

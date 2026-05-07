@@ -65,8 +65,13 @@ export async function generateOrderPdf(data: OrderFormData) {
     height: 90,
     color: rgb(1, 1, 1),
   });
-  drawBlackText(page1, 'Pret tricou cu maneca scurta - 150 lei', 100, 354, 12, font);
-  drawBlackText(page1, 'Pret tricou cu maneca lunga - 175 lei', 100, 334, 12, font);
+  drawBlackText(page1, '- conform contract educational, setul de uniforme este compus din 2 tricouri cu maneca', 100, 358, 9.6, font);
+  drawBlackText(page1, 'scurta si 2 tricouri cu maneca lunga in valoare de 650lei/set.', 100, 345, 9.6, font);
+  drawBlackText(page1, '- la solicitarea pe bucata (exceptand setul conform contract) pretul este:', 100, 327, 9.6, font);
+  page1.drawCircle({ x: 120, y: 317, size: 1.8, color: rgb(0, 0, 0) });
+  page1.drawCircle({ x: 120, y: 304, size: 1.8, color: rgb(0, 0, 0) });
+  drawBlackText(page1, 'tricou cu maneca scurta - 150lei/buc.', 128, 314, 9.6, font);
+  drawBlackText(page1, 'tricou cu maneca lunga - 175lei/buc.', 128, 301, 9.6, font);
 
   page2.setFont(bold);
   drawText(page2, data.signature_name, 232, 56, 15, bold);
