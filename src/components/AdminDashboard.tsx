@@ -62,13 +62,28 @@ export function AdminDashboard({ profile }: AdminDashboardProps) {
 
   const updateOrder = async (orderId: string, patch: Pick<Partial<Order>, 'is_paid' | 'notes'>) => {
     if (!supabase) return;
+    const previousOrders = orders;
     setStatus('');
     setOrders((current) => current.map((order) => (order.id === orderId ? { ...order, ...patch } : order)));
-    const { error } = await supabase.from('orders').update(patch).eq('id', orderId);
+    const { data, error } = await supabase.from('orders').update(patch).eq('id', orderId).select('id, is_paid, notes').single();
     if (error) {
-      setStatus(error.message);
-      void loadOrders();
+      setOrders(previousOrders);
+      setStatus(`Nu am putut salva in baza de date: ${error.message}`);
+      return;
     }
+    setOrders((current) =>
+      current.map((order) =>
+        order.id === orderId ? { ...order, is_paid: Boolean(data.is_paid), notes: data.notes ?? '' } : order,
+      ),
+    );
+    setStatus('Modificarea a fost salvata in baza de date.');
+    window.setTimeout(() => {
+      setStatus((currentStatus) => (currentStatus === 'Modificarea a fost salvata in baza de date.' ? '' : currentStatus));
+    }, 2200);
+  };
+
+  const saveNotes = async (orderId: string, notes: string) => {
+    await updateOrder(orderId, { notes });
   };
 
   const downloadSinglePdf = async (order: Order) => {
@@ -267,7 +282,7 @@ export function AdminDashboard({ profile }: AdminDashboardProps) {
                         const notes = event.target.value;
                         setOrders((current) => current.map((entry) => (entry.id === order.id ? { ...entry, notes } : entry)));
                       }}
-                      onBlur={(event) => void updateOrder(order.id, { notes: event.target.value })}
+                      onBlur={(event) => void saveNotes(order.id, event.target.value)}
                     />
                   </td>
                   <td>

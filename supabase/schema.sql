@@ -24,6 +24,8 @@ create table if not exists public.orders (
   created_at timestamptz not null default now()
 );
 
+grant update (is_paid, notes) on table public.orders to authenticated;
+
 create table if not exists public.order_items (
   id uuid primary key default gen_random_uuid(),
   order_id uuid not null references public.orders(id) on delete cascade,
