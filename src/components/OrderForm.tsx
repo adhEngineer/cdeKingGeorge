@@ -231,7 +231,7 @@ export function OrderForm({ profile }: OrderFormProps) {
           Parinte / Reprezentant legal
           <input value={form.parent_name} onChange={(event) => setForm({ ...form, parent_name: event.target.value })} required />
         </label>
-        <label>
+        <label className="order-date-field">
           Data comenzii
           <input type="date" value={form.order_date} onChange={(event) => setForm({ ...form, order_date: event.target.value })} required />
         </label>
@@ -242,7 +242,7 @@ export function OrderForm({ profile }: OrderFormProps) {
           <thead>
             <tr>
               <th>Produs</th>
-              <th>Nr. tricou</th>
+              <th>Marime tricou</th>
               <th>Cantitate set</th>
               <th>Cantitate buc.</th>
             </tr>
@@ -253,7 +253,7 @@ export function OrderForm({ profile }: OrderFormProps) {
               return (
                 <tr key={item.product_type}>
                   <td>{product?.label}</td>
-                  <td>
+                  <td className="shirt-size-cell">
                     <select value={item.shirt_size} onChange={(event) => updateItem(index, { shirt_size: event.target.value })}>
                       {shirtSizes.map((size) => (
                         <option key={size.size} value={size.size}>
@@ -289,6 +289,11 @@ export function OrderForm({ profile }: OrderFormProps) {
 
       <p className="size-warning">Alege dimensiunea tricourilor conform tabelului</p>
 
+      <div className="notes">
+        <strong>Nota:</strong> setul contine 2 tricouri cu maneca scurta si 2 tricouri cu maneca lunga, valoare {setPrice} lei/set.
+        La bucata: maneca scurta 150 lei, maneca lunga 175 lei.
+      </div>
+
       <div className="signature-row">
         <label>
           Semnatura Beneficiar - nume tastat
@@ -298,11 +303,6 @@ export function OrderForm({ profile }: OrderFormProps) {
           <span>Total estimat</span>
           <strong>{estimatedTotal} lei</strong>
         </div>
-      </div>
-
-      <div className="notes">
-        <strong>Nota:</strong> setul contine 2 tricouri cu maneca scurta si 2 tricouri cu maneca lunga, valoare {setPrice} lei/set.
-        La bucata: maneca scurta 150 lei, maneca lunga 175 lei.
       </div>
 
       {status && <div className="notice">{status}</div>}

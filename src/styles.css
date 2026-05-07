@@ -230,6 +230,7 @@ h2 {
 
 .form-grid label {
   align-self: start;
+  min-width: 0;
 }
 
 label {
@@ -242,6 +243,7 @@ label {
 input,
 select {
   width: 100%;
+  min-width: 0;
   min-height: 42px;
   padding: 0 12px;
   border: 1px solid #cfdcd5;
@@ -334,6 +336,10 @@ select:focus {
 
 .order-table {
   margin-top: 18px;
+}
+
+.shirt-size-cell select {
+  min-width: 76px;
 }
 
 table {
@@ -460,7 +466,7 @@ tr:last-child td {
 }
 
 .notes {
-  margin-top: 16px;
+  margin-top: 12px;
   padding: 12px 14px;
   border-left: 3px solid var(--green);
   background: #f7faf8;
@@ -805,6 +811,21 @@ button:disabled {
   .form-grid,
   .signature-row {
     grid-template-columns: 1fr;
+  }
+
+  .order-date-field input {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    text-align: left;
+  }
+
+  .shirt-size-cell select {
+    width: 92px;
+    min-width: 92px;
+    padding-left: 12px;
+    padding-right: 30px;
   }
 
   h1 {
