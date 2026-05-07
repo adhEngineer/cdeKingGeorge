@@ -466,6 +466,8 @@ tr:last-child td {
 }
 
 .notes {
+  display: grid;
+  gap: 3px;
   margin-top: 12px;
   padding: 12px 14px;
   border-left: 3px solid var(--green);

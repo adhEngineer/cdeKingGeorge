@@ -2,12 +2,11 @@ import JSZip from 'jszip';
 import ExcelJS from 'exceljs';
 import { supabase } from './supabase';
 import type { Order } from './types';
-import { getOrderSetQuantity, getSupplierSummaryRows, getUniformColor } from './uniforms';
+import { getSupplierSummaryRows, getUniformColor } from './uniforms';
 
 export async function exportOrdersXlsx(orders: Order[]) {
   const rows = orders.flatMap((order) => {
     const items = order.order_items?.length ? order.order_items : [undefined];
-    const setQuantity = getOrderSetQuantity(order.order_items ?? []);
     const uniformColor = getUniformColor(order.class_group);
     return items.map((item) => ({
       'Data creare': new Date(order.created_at).toLocaleString('ro-RO'),
@@ -21,7 +20,6 @@ export async function exportOrdersXlsx(orders: Order[]) {
       Observatii: order.notes ?? '',
       Produs: item?.product_type === 'short_sleeve' ? 'Tricou maneca scurta' : item?.product_type === 'long_sleeve' ? 'Tricou maneca lunga' : '',
       'Nr. tricou': item?.shirt_size ?? '',
-      'Cantitate set': item?.product_type === 'short_sleeve' ? setQuantity : '',
       'Cantitate bucata': item?.quantity_piece ?? '',
       'PDF': order.order_files?.[0]?.file_name ?? '',
     }));
@@ -41,7 +39,6 @@ export async function exportOrdersXlsx(orders: Order[]) {
     Observatii: '',
     Produs: '',
     'Nr. tricou': '',
-    'Cantitate set': '',
     'Cantitate bucata': '',
     PDF: '',
   }).map((key) => ({

@@ -27,5 +27,3 @@ export const products = [
     unitPrice: 175,
   },
 ] as const;
-
-export const setPrice = 650;

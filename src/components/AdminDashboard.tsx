@@ -3,7 +3,7 @@ import { Download, FileArchive, RefreshCw, Search, Sheet } from 'lucide-react';
 import { exportOrderPdfs, exportOrdersXlsx, exportSupplierSummaryXlsx } from '../lib/export';
 import { supabase } from '../lib/supabase';
 import type { Order, Profile } from '../lib/types';
-import { getOrderSetQuantity, getSupplierSummaryRows, getUniformColor, uniformColorOptions } from '../lib/uniforms';
+import { getSupplierSummaryRows, getUniformColor, uniformColorOptions } from '../lib/uniforms';
 
 type AdminDashboardProps = {
   profile: Profile | null;
@@ -187,7 +187,7 @@ export function AdminDashboard({ profile }: AdminDashboardProps) {
         <div className="supplier-summary-header">
           <div className="section-title">
             <h2>Total pentru furnizor</h2>
-            <p>Totalul include seturile ca 2 tricouri cu maneca scurta si 2 tricouri cu maneca lunga.</p>
+            <p>Totalul include doar cantitatile comandate la bucata.</p>
           </div>
           <button
             className="secondary-button"
@@ -276,7 +276,6 @@ export function AdminDashboard({ profile }: AdminDashboardProps) {
                         {item.product_type === 'short_sleeve' ? 'Scurta' : 'Lunga'} {item.shirt_size}, buc {item.quantity_piece}
                       </span>
                     ))}
-                    <span className="line-item">Set: {getOrderSetQuantity(order.order_items ?? [])}</span>
                   </td>
                   <td>
                     <label className="paid-field">

@@ -30,10 +30,6 @@ export function getUniformColor(classGroup: string) {
   return { key: 'empty', label: 'Selecteaza clasa/grupa' };
 }
 
-export function getOrderSetQuantity(items: OrderItemInput[]) {
-  return Math.max(0, ...items.map((item) => Number(item.quantity_set ?? 0)));
-}
-
 export function getProductSleeveLabel(productType: ProductType) {
   return productType === 'short_sleeve' ? 'Maneca scurta' : 'Maneca lunga';
 }
@@ -53,10 +49,9 @@ export function getSupplierSummaryRows(orders: Order[]) {
 
   orders.forEach((order) => {
     const color = getUniformColor(order.class_group);
-    const setQuantity = getOrderSetQuantity(order.order_items ?? []);
 
     order.order_items?.forEach((item) => {
-      const total = Number(item.quantity_piece ?? 0) + setQuantity * 2;
+      const total = Number(item.quantity_piece ?? 0);
       if (total <= 0) return;
 
       const key = `${color.key}-${item.product_type}-${item.shirt_size}`;

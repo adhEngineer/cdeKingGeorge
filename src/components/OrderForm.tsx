@@ -1,10 +1,10 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { Download, FileText, RefreshCw, Save } from 'lucide-react';
-import { products, setPrice, shirtSizes } from '../lib/constants';
+import { products, shirtSizes } from '../lib/constants';
 import { downloadBlob, generateOrderPdf } from '../lib/pdf';
 import { supabase } from '../lib/supabase';
 import type { Order, OrderFormData, OrderItemInput, Profile } from '../lib/types';
-import { classGroupOptions, getOrderSetQuantity, getUniformColor, normalizeClassGroup } from '../lib/uniforms';
+import { classGroupOptions, getUniformColor, normalizeClassGroup } from '../lib/uniforms';
 
 type OrderFormProps = {
   profile: Profile | null;
@@ -26,7 +26,6 @@ export function OrderForm({ profile }: OrderFormProps) {
     parent_name: profile?.parent_name ?? '',
     order_date: today,
     signature_name: profile?.parent_name ?? '',
-    set_quantity: 0,
     items: initialItems,
   });
   const [status, setStatus] = useState('');
@@ -56,7 +55,6 @@ export function OrderForm({ profile }: OrderFormProps) {
           parent_name: latest.parent_name,
           order_date: today,
           signature_name: latest.signature_name || latest.parent_name,
-          set_quantity: getOrderSetQuantity(latest.order_items ?? []),
           items: mergeItems(latest.order_items ?? initialItems),
         });
       } else {
@@ -80,13 +78,11 @@ export function OrderForm({ profile }: OrderFormProps) {
   }, [profile?.id]);
 
   const estimatedTotal = useMemo(() => {
-    const pieces = form.items.reduce((total, item) => {
+    return form.items.reduce((total, item) => {
       const product = products.find((entry) => entry.id === item.product_type);
       return total + (product?.unitPrice ?? 0) * item.quantity_piece;
     }, 0);
-    const sets = form.set_quantity * setPrice;
-    return pieces + sets;
-  }, [form.items, form.set_quantity]);
+  }, [form.items]);
 
   const uniformColor = getUniformColor(form.class_group);
 
@@ -142,7 +138,7 @@ export function OrderForm({ profile }: OrderFormProps) {
         form.items.map((item, index) => ({
           order_id: order.id,
           ...item,
-          quantity_set: index === 0 ? form.set_quantity : 0,
+          quantity_set: 0,
         })),
       );
       if (itemError) throw itemError;
@@ -188,7 +184,6 @@ export function OrderForm({ profile }: OrderFormProps) {
         parent_name: order.parent_name,
         order_date: order.order_date,
         signature_name: order.signature_name,
-        set_quantity: getOrderSetQuantity(order.order_items ?? []),
         items: mergeItems(order.order_items ?? initialItems),
       };
       const blob = await generateOrderPdf(pdfData);
@@ -243,7 +238,6 @@ export function OrderForm({ profile }: OrderFormProps) {
             <tr>
               <th>Produs</th>
               <th>Marime tricou</th>
-              <th>Cantitate set</th>
               <th>Cantitate buc.</th>
             </tr>
           </thead>
@@ -262,16 +256,6 @@ export function OrderForm({ profile }: OrderFormProps) {
                       ))}
                     </select>
                   </td>
-                  {index === 0 && (
-                  <td rowSpan={form.items.length}>
-                    <input
-                      type="number"
-                      min="0"
-                      value={form.set_quantity}
-                      onChange={(event) => setForm({ ...form, set_quantity: Number(event.target.value) })}
-                    />
-                  </td>
-                  )}
                   <td>
                     <input
                       type="number"
@@ -290,8 +274,9 @@ export function OrderForm({ profile }: OrderFormProps) {
       <p className="size-warning">Alege dimensiunea tricourilor conform tabelului</p>
 
       <div className="notes">
-        <strong>Nota:</strong> setul contine 2 tricouri cu maneca scurta si 2 tricouri cu maneca lunga, valoare {setPrice} lei/set.
-        La bucata: maneca scurta 150 lei, maneca lunga 175 lei.
+        <strong>Nota:</strong>
+        <span>Pret tricou cu maneca scurta - 150 lei</span>
+        <span>Pret tricou cu maneca lunga - 175 lei</span>
       </div>
 
       <div className="signature-row">
@@ -300,7 +285,7 @@ export function OrderForm({ profile }: OrderFormProps) {
           <input value={form.signature_name} onChange={(event) => setForm({ ...form, signature_name: event.target.value })} required />
         </label>
         <div className="total-box">
-          <span>Total estimat</span>
+          <span>Total de plata</span>
           <strong>{estimatedTotal} lei</strong>
         </div>
       </div>
@@ -348,7 +333,7 @@ export function OrderForm({ profile }: OrderFormProps) {
                 <div>
                   <strong>{order.student_name}</strong>
                   <span>
-                    {order.class_group} | set {getOrderSetQuantity(order.order_items ?? [])} | {new Date(order.created_at).toLocaleDateString('ro-RO')} | semnat de {order.signature_name}
+                    {order.class_group} | {new Date(order.created_at).toLocaleDateString('ro-RO')} | semnat de {order.signature_name}
                   </span>
                 </div>
                 <button className="secondary-button" type="button" onClick={() => void downloadOrder(order)}>

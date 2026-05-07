@@ -38,6 +38,5 @@ export type OrderFormData = {
   parent_name: string;
   order_date: string;
   signature_name: string;
-  set_quantity: number;
   items: OrderItemInput[];
 };

@@ -20,6 +20,23 @@ const drawText = (
   });
 };
 
+const drawBlackText = (
+  page: import('pdf-lib').PDFPage,
+  text: string,
+  x: number,
+  y: number,
+  size = 10,
+  font?: import('pdf-lib').PDFFont,
+) => {
+  page.drawText(text, {
+    x,
+    y,
+    size,
+    font,
+    color: rgb(0, 0, 0),
+  });
+};
+
 export async function generateOrderPdf(data: OrderFormData) {
   const templateBytes = await fetch(templateUrl).then((response) => response.arrayBuffer());
   const pdfDoc = await PDFDocument.load(templateBytes);
@@ -30,17 +47,26 @@ export async function generateOrderPdf(data: OrderFormData) {
   page1.setFont(font);
   page2.setFont(font);
 
-  drawText(page1, data.student_name, 218, 595, 14, bold);
-  drawText(page1, data.class_group, 278, 575, 14, bold);
-  drawText(page1, data.parent_name, 234, 554, 14, bold);
-  drawText(page1, data.order_date, 160, 534, 14, bold);
+  drawText(page1, data.student_name, 206, 579, 13, bold);
+  drawText(page1, data.class_group, 274, 559, 12, bold);
+  drawText(page1, data.parent_name, 236, 538, 13, bold);
+  drawText(page1, data.order_date, 160, 518, 13, bold);
 
   data.items.forEach((item, index) => {
-    const y = index === 0 ? 443 : 416;
-    drawText(page1, item.shirt_size, 356, y - 1, 13, bold);
-    drawText(page1, String(item.quantity_piece), 536, y - 1, 13, bold);
+    const y = index === 0 ? 443 : 424;
+    drawText(page1, item.shirt_size, 407, y, 13, bold);
+    drawText(page1, String(item.quantity_piece), 486, y, 13, bold);
   });
-  drawText(page1, String(data.set_quantity), 462, 428, 13, bold);
+
+  page1.drawRectangle({
+    x: 92,
+    y: 296,
+    width: 468,
+    height: 90,
+    color: rgb(1, 1, 1),
+  });
+  drawBlackText(page1, 'Pret tricou cu maneca scurta - 150 lei', 100, 354, 12, font);
+  drawBlackText(page1, 'Pret tricou cu maneca lunga - 175 lei', 100, 334, 12, font);
 
   page2.setFont(bold);
   drawText(page2, data.signature_name, 232, 56, 15, bold);
