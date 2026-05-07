@@ -818,7 +818,20 @@ button:disabled {
     width: 100%;
     max-width: 100%;
     min-width: 0;
+    inline-size: 100%;
+    appearance: none;
+    -webkit-appearance: none;
     text-align: left;
+  }
+
+  .order-date-field input::-webkit-date-and-time-value {
+    min-width: 0;
+    text-align: left;
+  }
+
+  .order-date-field input::-webkit-calendar-picker-indicator {
+    flex: 0 0 auto;
+    margin-left: 4px;
   }
 
   .shirt-size-cell select {
